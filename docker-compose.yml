@@ -1,0 +1,56 @@
+version: "3.7"
+
+services:
+  
+  edge-proxy:
+    image: nginx:1.25.2
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    networks:
+      - edge
+    ports:
+      - 80:80     
+      - 81:81 
+      - 91:91
+  
+  localhost1_1:
+    image: fabiostefani/showinfomachine
+    hostname: localhost1_1
+    environment:
+      - APP_NAME=localhost1_instancia_1
+    networks:
+      - edge
+
+  localhost1_2:
+    image: fabiostefani/showinfomachine
+    hostname: localhost1_2
+    environment:
+      - APP_NAME=localhost1_instancia_2
+    networks:
+      - edge
+  
+  localhost2:
+    image: fabiostefani/showinfomachine
+    environment:
+      - APP_NAME= localhost2
+    networks:
+      - edge
+  
+  localhost3:
+    image: fabiostefani/showinfomachine
+    hostname: localhost3
+    environment:
+      - APP_NAME= localhost3
+    networks:
+      - edge
+
+  localhost4:
+    image: fabiostefani/echoserver
+    hostname: localhost3
+    environment: { "APP_NAME": "App 1", "HEADER_COLOR": "red-600" }
+    networks:
+      - edge
+
+networks:
+  edge:
+    driver: bridge
